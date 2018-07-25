@@ -153,7 +153,8 @@ class AzureDLFileSystem(object):
         # in the case of getting info about the root itself or if the cache won't be hit
         # simply return the result of a GETFILESTATUS from the service
         if invalidate_cache or path_as_posix in {'/', '.'}:
-            to_return = self.azure.call('GETFILESTATUS', path_as_posix, expected_error_code=expected_error_code)['FileStatus']
+            to_return = self.azure.call('GETFILESTATUS', path_as_posix, expected_error_code=expected_error_code)
+            to_return = to_return['FileStatus'] if 'FileStatus' in to_return else to_return['fileStatus']
             to_return['name'] = path_as_posix
 
             # add the key/value pair back to the cache so long as it isn't the root
